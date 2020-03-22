@@ -2,7 +2,7 @@
 <launch>
 
   <!-- load robot URDF description -->
-  <param name="robot_description" command="xacro --inorder $(find challenge_project)/urdf/turtlebot3_burger.urdf.xacro"/>
+  <param name="robot_description" command="xacro --inorder $(find challenge_project)/urdf/turtlebot3_burger/turtlebot3_burger.urdf.xacro"/>
 
   <!-- robot initial position -->
   <arg name="x" default="0"/>

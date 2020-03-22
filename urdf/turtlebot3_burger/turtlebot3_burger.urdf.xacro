@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="turtlebot3_burger" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:include filename="$(find challenge_project)/urdf/common_properties.xacro"/>
-  <xacro:include filename="$(find challenge_project)/urdf/turtlebot3_burger.gazebo.xacro"/>
+  <xacro:include filename="$(find challenge_project)/urdf/turtlebot3_burger/common_properties.xacro"/>
+  <xacro:include filename="$(find challenge_project)/urdf/turtlebot3_burger/turtlebot3_burger.gazebo.xacro"/>
     <xacro:property name="camera_link" value="0.015" /> <!-- Size of square 'camera' box -->
   <link name="base_footprint"/>
 
