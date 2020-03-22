@@ -2,8 +2,8 @@
 
 <robot name="robot_with_sensors" xmlns:xacro="https://www.ros.org/wiki/xacro" >
     
-  <xacro:include filename="$(find challenge_project)/urdf/robot_with_sensors_materials.xacro" />
-  <xacro:include filename="$(find challenge_project)/urdf/robot_with_sensors.gazebo" />
+  <xacro:include filename="$(find challenge_project)/urdf/robot_with_sensors/robot_with_sensors_materials.xacro" />
+  <xacro:include filename="$(find challenge_project)/urdf/robot_with_sensors/robot_with_sensors.gazebo" />
 
   <!-- ========================== Chassis definition ======================== -->
   <link name="link_chassis">
