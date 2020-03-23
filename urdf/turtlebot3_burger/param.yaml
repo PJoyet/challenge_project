@@ -1,5 +1,4 @@
 robot_name: 'turtlebot3_burger'
-
 camera_position: [0.03,0.0,0.135]
 camera_angle: [0.0,0.610865238,0.0]
 camera_fov: 1.3962634
