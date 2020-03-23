@@ -6,11 +6,11 @@
 
   <!-- robot initial position -->
   <arg name="x" default="0"/>
-  <arg name="y" default="0"/>
+  <arg name="y" default="10.5"/>
   <arg name="z" default="0.0175"/>
   <arg name="roll" default="0"/>
   <arg name="pitch" default="0"/>
-  <arg name="yaw" default="1.5708"/>
+  <arg name="yaw" default="3.1415"/>
 
   <!-- simulation parameters -->
   <arg name="world" default="empty"/> 
