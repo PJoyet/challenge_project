@@ -1,0 +1,9 @@
+# colors parameters:
+yellow_range:   [[0,200,200],[0,255,255]]
+red_range:      [[0,0,200],[0,0,255]]
+green_range:    [[0,200,0],[0,255,0]]
+
+# command gains:
+klinear:     1
+kangular1:   5
+kangular2:   5

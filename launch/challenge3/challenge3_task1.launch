@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+
+  <rosparam command="load" file="$(find challenge_project)/config/turtlebot3_burger.yaml"/>
+  <rosparam command="load" file="$(find challenge_project)/config/line_detection.yaml"/>
+
+  <include file="$(find challenge_project)/launch/gazebo.launch">
+  <arg name="x" value="-1"/>
+  <arg name="y" value="1"/>
+  <arg name="z" value="0.02"/>
+  <arg name="roll" value="0"/>
+  <arg name="pitch" value="0"/>
+  <arg name="yaw" value="4.7124"/>
+  <arg name="world" value="$(find challenge_project)/worlds/challenge3.world"/>
+  </include>
+
+  <node pkg="challenge_project" name="line_detection" type="line_following.py" required="true"/>
+
+  <node name="OBSTACLE" pkg="challenge_project" type="challenge3b_world_control.py"/>
+  <node name="DOOR" pkg="challenge_project" type="challenge3a_world_control.py"/>
+</launch>
