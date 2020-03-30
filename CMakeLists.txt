@@ -9,15 +9,18 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
- add_message_files(
-   FILES
-   FBLR_distance.msg
- )
+add_message_files(
+  FILES
+  FBLR_distance.msg
+)
 
- generate_messages(
-   DEPENDENCIES
-   std_msgs
- )
+catkin_python_setup(
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 catkin_package(
   CATKIN_DEPENDS message_runtime

@@ -72,7 +72,7 @@ def get_points(img,color,nbPoints=20):
     #print(len(points))
     return points[::-1]#.reverse()
     
-def get_speed(pub,pt1,pt2,angular2,globalspeed):
+def get_speed(pt1,pt2,angular2,globalspeed):
     linear = sqrt(pt1[0]**2 + pt1[1]**2)
     angular1 = get_angle((0,0),pt1)
     
@@ -81,12 +81,18 @@ def get_speed(pub,pt1,pt2,angular2,globalspeed):
     linear = (linear*klinear)*globalspeed
     angular = (- (kangular1*angular1) - (kangular2*angular2))*globalspeed
     return linear,angular
+
+def set_speed(pub,linear,angular):
+    twist = Twist()
+    twist.linear.x = linear
+    twist.angular.z = angular
+    pub.publish(twist)
     
 def line_detection(img):
     global yellow,red,green
     global height,width
     global pubTopicName
-    twist = Twist()
+
     pub = rospy.Publisher(pubTopicName,Twist,queue_size=3)    
     
     bridge = CvBridge()
@@ -103,10 +109,9 @@ def line_detection(img):
             pt1 = get_pos(yellow_points[0])
             pt2 = get_pos(yellow_points[4])
             angle = get_angle(pt1,pt2)
-            linear,angular = get_speed(pub,pt1,pt2,angle,2)
-            twist.linear.x = linear
-            twist.angular.z = angular
-            pub.publish(twist)
+            linear,angular = get_speed(pt1,pt2,angle,2)
+	    set_speed(pub,linear,angular)
+
             cv2.arrowedLine(image, yellow_points[0], yellow_points[4],(0, 100, 100), 5, cv2.LINE_AA, 0, 0.08)
             
             text_linear =  "linear speed  : %f"%(linear)
@@ -124,10 +129,8 @@ def line_detection(img):
             pt1 = get_pos(red_points[0])
             pt2 = get_pos(red_points[4])
             angle = get_angle(pt1,pt2)
-            linear,angular = get_speed(pub,pt1,pt2,angle,1)
-            twist.linear.x = linear
-            twist.angular.z = angular
-            pub.publish(twist)
+            linear,angular = get_speed(pt1,pt2,angle,1)
+	    set_speed(pub,linear,angular)
             cv2.arrowedLine(image, red_points[0], red_points[4],(0, 0, 100), 5, cv2.LINE_AA, 0, 0.08)
             
             text_linear =  "linear speed  : %f"%(linear)

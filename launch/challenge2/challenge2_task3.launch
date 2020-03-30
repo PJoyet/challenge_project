@@ -9,7 +9,7 @@
     <arg name="yaw" value="3.14"/>
   </include>
 
-  <include file="$(find challenge_project)/launch/lds_distance_servoing.launch">
+  <include file="$(find challenge_project)/launch/lds_moving_obstacle_avoidance.launch">
     <arg name="nom" value='turtlebot'/>
   </include>
 
