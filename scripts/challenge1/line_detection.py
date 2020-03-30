@@ -16,7 +16,7 @@ red_lower  = np.array([0,0,200])
 
 
 def get_points(img,lower,upper,dim=10):
-    height,weight = rospy.get_param("/camera_image_size")
+    height,weight = rospy.get_param("/cam_image_size")
     points = []
     for i in range(dim,height-dim,dim):
         row = img[height-i-dim:height-i+dim]
@@ -34,10 +34,10 @@ def get_angle(pt1,pt2):
     return (atan2(Y,X)-pi/2)
 
 def get_pos(pt):
-    height,width = rospy.get_param("/camera_image_size")
-    cam_position = rospy.get_param("/camera_position")
-    cam_angle = rospy.get_param("/camera_angle")
-    cam_fov = rospy.get_param("/camera_fov")
+    height,width = rospy.get_param("/cam_image_size")
+    cam_position = rospy.get_param("/cam_position")
+    cam_angle = rospy.get_param("/cam_orientation")
+    cam_fov = rospy.get_param("/cam_fov")
     
     
     delta_X = -(pt[0]-width//2)

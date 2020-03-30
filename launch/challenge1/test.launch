@@ -1,4 +1,0 @@
-<launch>
-<rosparam command="load" file="$(find challenge_project)/urdf/turtlebot3_burger/param.yaml" />
-<node pkg="challenge_project" name="color_detection" type="line_detection.py" launch-prefix="xterm -e" required="true"/>
-</launch>

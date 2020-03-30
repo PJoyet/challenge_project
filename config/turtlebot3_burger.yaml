@@ -3,6 +3,8 @@ robot_name:           "turtlebot3_burger"
 
 # motors parameters:  
 motorsCommandTopic:   "cmd_vel"
+max_linear_velocity:  0.22
+max_angular_velocity: 2.84
 
 # camera parameters:
 cam_position:         [0.03,0.0,0.135]

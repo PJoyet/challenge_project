@@ -4,11 +4,11 @@
   <arg name="vitesse_ang" default="0.5"/>
 
   <include file="$(find challenge_project)/launch/gazebo.launch">
-    <!--arg name="world_name" value="$(find challenge_project)/worlds/challenge2.world"/-->
+    <arg name="world" value="$(find challenge_project)/worlds/challenge2.world"/>
     <arg name="yaw" value="3.14"/>
   </include>
 
-  <include file="$(find challenge_project)/launch/lds_stop.launch">
+  <include file="$(find challenge_project)/launch/challenge2/lds_stop.launch">
     <arg name="nom" value='turtlebot'/>
   </include>
 

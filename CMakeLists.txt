@@ -6,9 +6,21 @@ find_package(catkin REQUIRED COMPONENTS
   urdf
   rospy
   std_msgs
+  message_generation
 )
 
+ add_message_files(
+   FILES
+   FBLR_distance.msg
+ )
+
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
+
 catkin_package(
+  CATKIN_DEPENDS message_runtime
 )
 
 include_directories(
