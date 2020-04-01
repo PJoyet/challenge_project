@@ -32,11 +32,11 @@
 * **rviz**
   * configuration.rviz
 * **scripts**
-  * **challenge1**
+  * challenge1
     - 
-  * **challenge2**
+  * challenge2
     - 
-  * **challenge3**
+  * challenge3
     - 
 * **urdf**
   * **robot_with_sensors**
