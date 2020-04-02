@@ -22,11 +22,12 @@ def line_detection(img):
 
     bridge = CvBridge()
     image = bridge.imgmsg_to_cv2(img, "bgr8")
-    image = cv2.GaussianBlur(image,(5,5),0)
+    hsv=cv2.cvtColor(image,cv2.COLOR_RGB2HSV)
+    image = cv2.GaussianBlur(hsv,(5,5),0)
 
-    yellow_points = LineDetection(image,'yellow')
-    red_points = LineDetection(image,'red')
-    green_points = LineDetection(image,'green')
+    yellow_points = LineDetection(image,'yellow',colorformat="hsv")
+    red_points = LineDetection(image,'red',colorformat="hsv")
+    green_points = LineDetection(image,'green',colorformat="hsv")
     max_points = max([yellow_points,red_points,green_points],key=len)
 
     if len(max_points)>=5:

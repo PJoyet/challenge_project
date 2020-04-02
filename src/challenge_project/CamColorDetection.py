@@ -5,12 +5,12 @@ import rospy, cv2
 import numpy as np
 from math import tan,pi,sqrt,atan2,atan
 
-BLACK = np.uint8(([000,000,000],[055,055,055]))
-WHITE = np.uint8(([200,200,200],[255,255,255]))
-RED   = np.uint8(([000,000,250],[000,000,255]))
-GREEN = np.uint8(([000,200,000],[000,255,000]))
-BLUE  = np.uint8(([200,000,000],[255,000,000]))
-YELLOW= np.uint8(([000,200,200],[000,255,255]))
+BLACK = np.uint8([[000,000,000],[055,055,055]])
+WHITE = np.uint8([[200,200,200],[255,255,255]])
+RED   = np.uint8([[000,000,250],[000,000,255]])
+GREEN = np.uint8([[000,200,000],[000,255,000]])
+BLUE  = np.uint8([[200,000,000],[255,000,000]])
+YELLOW= np.uint8([[000,200,200],[000,255,255]])
 
 try:
     cam_pos = rospy.get_param("/cam_position")
@@ -61,10 +61,12 @@ def LineDetection(image,color,colorformat="rgb",nbPoints=20):
     elif color == 'YELLOW' or color == 'yellow':
         color = YELLOW  
     else :
-        color = np.uint8(color) 
+        color = np.fliplr(np.uint8(color))
 
     if colorformat == 'HSV' or colorformat == 'hsv':
-        color = cv2.cvtColor(color, cv2.COLOR_BGR2HSV) 
+        
+        color = np.fliplr(color)
+        color = cv2.cvtColor(np.array([color]), cv2.COLOR_BGR2HSV)[0]
 
 
     for i in range(height//nbPoints,height,height//nbPoints):
