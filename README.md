@@ -9,9 +9,12 @@
 
 ### Contenus
 
-* **launch**
+- **config**
+  - robot_with_sensors.yaml
+  - turtlebot3_burger.yaml
 
-  - **challenge1**
+* **launch**
+- **challenge1**
     - challenge1_task1.launch
     - challenge1_task2.launch
     - challenge1_task3.launch
@@ -32,12 +35,17 @@
 * **rviz**
   * configuration.rviz
 * **scripts**
-  * **challenge1**
+  * challenge1
+    - line_following.py
+  * challenge2
     - 
-  * **challenge2**
+  * challenge3
     - 
-  * **challenge3**
-    - 
+* **src**
+  
+  * challenge_project
+  
+    * CamColorDetection.py
 * **urdf**
   * **robot_with_sensors**
     * robot_with_sensors.gazebo
@@ -45,7 +53,6 @@
     * robot_with_sensors_materials.xacro
   * **turtlebot3_burger**
     * common_propertie.xacro
-    * param.xaml
     * turtlebot3_burger.gazebo.xacro
     * turtlebot3_burger.urdf.xacro
 * **worlds**
