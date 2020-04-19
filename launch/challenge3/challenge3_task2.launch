@@ -1,27 +1,28 @@
 <launch>
 
-  <arg name="vitesse_lin" default="0.5"/>
-  <arg name="vitesse_ang" default="0.2"/>
+  <arg name="task1" default="true"/>
 
-  <include file="$(find challenge_project)/launch/gazebo_cha3.launch">
-    <!--arg name="world_name" value="$(find challenge_project)/worlds/challenge2.world"/-->
-    <arg name="x" value="-5.2"/>
-    <arg name="y" value="1.2"/>
-    <arg name="z" value="0.02"/>
-    <arg name="yaw" value="3.14"/>
-  </include>
+  <group if="$(arg task1)">
+    <include file="$(find challenge_project)/launch/challenge3/challenge3_task1.launch"/>
+  </group>
 
-  <include file="$(find challenge_project)/launch/movement_corridor.launch">
-    <arg name="nom" value='turtlebot'/>
-  </include>
+  <group unless="$(arg task1)">
+    <param name="task1_running" type="bool" value="false"/>
+    <include file="$(find challenge_project)/launch/gazebo.launch">
+      <arg name="x" value="-5.2"/>
+      <arg name="y" value="1.2"/>
+      <arg name="z" value="0.02"/>
+      <arg name="roll" value="0"/>
+      <arg name="pitch" value="0"/>
+      <arg name="yaw" value="3.14"/>
+      <arg name="world" value="$(find challenge_project)/worlds/challenge3.world"/>
+    </include>
+    <node pkg="challenge_project" name="lds_distance" type="lds_distance_publisher.py" required='true'/>
+  </group>
+  <param name="task2_part1_running" type="bool" value="true"/>
+  <param name="task2_part2_running" type="bool" value="true"/>
+  <param name="linear_scale" type="double" value="0.5" />
 
-  <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
-    <param name="publish_frequency" type="double" value="30.0" />
-  </node>
-
-  <node pkg="joint_state_publisher" type="joint_state_publisher" name="state_publisher"></node>
-
-  <param name="linear_scale" type="double" value="$(arg vitesse_lin)" />
-  <param name="angular_scale" type="double" value="$(arg vitesse_ang)" />
-
+   <node pkg="challenge_project" name="movement_corridor" type="movement_corridor.py" launch-prefix="xterm -e"/>
+   <node pkg="challenge_project" name="movement_corridor_2" type="movement_corridor_part2.py" launch-prefix="xterm -e"/>
 </launch>

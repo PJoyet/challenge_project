@@ -8,12 +8,31 @@ from geometry_msgs.msg import Twist
 
 from challenge_project.CamColorDetection import LineDetection,PointRallyingSpeed
 
-pubTopicName = rospy.get_param("/motorsCommandTopic")
-subTopicName = rospy.get_param("/imageTopicName")
+pubTopicName = "/cmd_vel"
+subTopicName = "/camera/image_raw"
+max_linear_speed = 0.22
+max_angular_speed = 2.84
+gains = [1,5,5]
+camINFO = { 'height' : 0.135,
+            'pitch'  : 0.610865238,
+            'fov'    : 1.3962634
+          }
+try:
+    SpeedGain = rospy.get_param("/SpeedGain")
+except rospy.ROSInterruptException:
+    SpeedGain = 1
+
 
 def set_speed(linear,angular):
     pub = rospy.Publisher(pubTopicName,Twist,queue_size=3)
     twist = Twist()
+    linear *= SpeedGain
+    angular *= SpeedGain
+    if linear >= max_linear_speed:
+        linear = max_linear_speed
+    if angular >= max_angular_speed:
+        linear = max_angular_speed
+
     twist.linear.x = linear
     twist.angular.z = angular
     pub.publish(twist)
@@ -31,14 +50,19 @@ def line_detection(img):
     max_points = max([yellow_points,red_points,green_points],key=len)
 
     if len(max_points)>=5:
+
         if max_points == yellow_points:
-            linear,angular = PointRallyingSpeed(yellow_points[0],yellow_points[4],2,image.shape)
+            linear,angular = PointRallyingSpeed(yellow_points[0],yellow_points[4],image.shape,gains,camINFO)
             set_speed(linear,angular)
+
         if max_points == red_points:
-            linear,angular = PointRallyingSpeed(red_points[0],red_points[4],0.8,image.shape)
+            linear,angular = PointRallyingSpeed(red_points[0],red_points[4],image.shape,gains,camINFO)
+            linear *= 0.5
+
             set_speed(linear,angular)
         if max_points == green_points:
             set_speed(0,0)
+
     else:
         set_speed(0,0)
 

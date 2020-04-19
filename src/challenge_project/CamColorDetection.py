@@ -5,42 +5,13 @@ import rospy, cv2
 import numpy as np
 from math import tan,pi,sqrt,atan2,atan
 
-BLACK = np.uint8([[000,000,000],[055,055,055]])
+BLACK = np.uint8([[000,000,000],[ 55, 55, 55]])
 WHITE = np.uint8([[200,200,200],[255,255,255]])
 RED   = np.uint8([[000,000,250],[000,000,255]])
 GREEN = np.uint8([[000,200,000],[000,255,000]])
-BLUE  = np.uint8([[200,000,000],[255,000,000]])
-YELLOW= np.uint8([[000,200,200],[000,255,255]])
-
-try:
-    cam_pos = rospy.get_param("/cam_position")
-except rospy.ROSInterruptException:
-    cam_pos = None
-
-try:
-    cam_ori = rospy.get_param("/cam_orientation")
-except rospy.ROSInterruptException:
-    cam_ori = None
-
-try:
-    cam_fov = rospy.get_param("/cam_fov")
-except rospy.ROSInterruptException:
-    cam_fov = None
-
-try:
-    klinear = rospy.get_param("/klinear")
-except rospy.ROSInterruptException:
-    klinear = None
-
-try:
-    kangular1 = rospy.get_param("/kangular1")
-except rospy.ROSInterruptException:
-    kangular1 = None
-
-try:
-    kangular2 = rospy.get_param("/kangular2")
-except rospy.ROSInterruptException:
-    kangular2 = None
+BLUE  = np.uint8([[100,000,000],[255,000,000]])
+YELLOW= np.uint8([[000,230,230],[000,255,255]])
+ORANGE= np.uint8([[000, 75,230],[ 25,100,255]])
 
 
 def LineDetection(image,color,colorformat="rgb",nbPoints=20):
@@ -59,7 +30,9 @@ def LineDetection(image,color,colorformat="rgb",nbPoints=20):
     elif color == 'BLUE' or color == 'blue':
         color = BLUE 
     elif color == 'YELLOW' or color == 'yellow':
-        color = YELLOW  
+        color = YELLOW
+    elif color == 'ORANGE' or color == 'orange':
+        color = ORANGE 
     else :
         color = np.fliplr(np.uint8(color))
 
@@ -79,30 +52,29 @@ def LineDetection(image,color,colorformat="rgb",nbPoints=20):
             points.append((cx,cy+i-height//nbPoints))
     return points[::-1]	
 
-
 def get_angle(pt1,pt2):
     X = pt2[0]-pt1[0]
     Y = pt2[1]-pt1[1]
     return (atan2(Y,X)-pi/2)
 
-def PointRallyingSpeed(point1,point2,speedcoef,imgshape,camPOS=cam_pos,camORI=cam_ori,camFOV=cam_fov,klin=klinear,kang1=kangular1,kang2=kangular2):
+def PointRallyingSpeed(point1,point2,imgshape,gains,camInfo):
     height = imgshape[0]
     width   = imgshape[1]
 
-    dist_bas =  camPOS[2]*tan((pi-camFOV)/2-camORI[1])
-    dist_haut = camPOS[2]*tan(pi/2-camORI[1]) 
+    dist_bas =  camInfo['height']*tan((pi-camInfo['fov'])/2-camInfo['pitch'])
+    dist_haut = camInfo['height']*tan(pi/2-camInfo['pitch']) 
 
     delta_X1 = -(point1[0]-width//2)
     delta_Y1 = height-point1[1]
     delta_X2 = -(point2[0]-width//2)
     delta_Y2 = height-point2[1]
 
-    Y1 = delta_Y1*(dist_haut-dist_bas)/(height/2)+dist_bas+camPOS[0]
-    dist_x1 = Y1*tan(camFOV/2)
+    Y1 = delta_Y1*(dist_haut-dist_bas)/(height/2)+dist_bas
+    dist_x1 = Y1*tan(camInfo['fov']/2)
     X1 = delta_X1*(dist_x1/width/2)
 
-    Y2 = delta_Y2*(dist_haut-dist_bas)/(height/2)+dist_bas+camPOS[0]
-    dist_x2 = Y2*tan(camFOV/2)
+    Y2 = delta_Y2*(dist_haut-dist_bas)/(height/2)+dist_bas
+    dist_x2 = Y2*tan(camInfo['fov']/2)
     X2 = delta_X2*(dist_x2/width/2)
 
     pt1 = (X1,Y1)
@@ -112,7 +84,7 @@ def PointRallyingSpeed(point1,point2,speedcoef,imgshape,camPOS=cam_pos,camORI=ca
     angle2 = get_angle(pt1,pt2)
 
     linear = sqrt(pt1[0]**2 + pt1[1]**2)
-    linear = (linear*klin)*speedcoef
-    angular = (- (kang1*angle1) - (kang2*angle2))*speedcoef    
+    linear = (linear*gains[0])
+    angular = (- (gains[1]*angle1) - (gains[2]*angle2))
 
     return linear,angular

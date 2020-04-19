@@ -2,16 +2,14 @@
 <robot name="turtlebot3_burger_sim" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:arg name="laser_visual" default="false"/>
   <xacro:arg name="imu_visual"   default="false"/>
-  <xacro:property name="yaml_file" value="$(find challenge_project)/config/turtlebot3_burger.yaml" />
-  <xacro:property name="props" value="${load_yaml(yaml_file)}"/>
 
   <gazebo reference="base_link">
     <material>Gazebo/DarkGrey</material>
   </gazebo>
 
   <gazebo reference="wheel_left_link">
-    <mu1>0.1</mu1>
-    <mu2>0.1</mu2>
+    <mu1>1</mu1>
+    <mu2>1</mu2>
     <kp>500000.0</kp>
     <kd>10.0</kd>
     <minDepth>0.001</minDepth>
@@ -21,8 +19,8 @@
   </gazebo>
 
   <gazebo reference="wheel_right_link">
-    <mu1>0.1</mu1>
-    <mu2>0.1</mu2>
+    <mu1>1</mu1>
+    <mu2>1</mu2>
     <kp>500000.0</kp>
     <kd>10.0</kd>
     <minDepth>0.001</minDepth>
@@ -49,11 +47,9 @@
     <material>Gazebo/FlatBlack</material>
   </gazebo>
 
-  <xacro:property name="motorsCommandTopic" value="${props['motorsCommandTopic']}" />
-
   <gazebo>
     <plugin name="turtlebot3_burger_controller" filename="libgazebo_ros_diff_drive.so">
-      <commandTopic>${motorsCommandTopic}</commandTopic>
+      <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
       <odometrySource>world</odometrySource>
@@ -103,14 +99,6 @@
     </plugin>
   </gazebo>
 
-  <xacro:property name="lds_scan_samples" value="${props['lds_scan_samples']}" />
-  <xacro:property name="lds_scan_resolution" value="${props['lds_scan_resolution']}" />
-  <xacro:property name="lds_scan_angle" value="${props['lds_scan_angle']}" />
-  <xacro:property name="lds_range" value="${props['lds_range']}" />
-  <xacro:property name="lds_range_resolution" value="${props['lds_range_resolution']}" />
-  <xacro:property name="ldsTopicName" value="${props['ldsTopicName']}" />
-  <xacro:property name="ldsFrameName" value="${props['ldsFrameName']}" />
-
   <gazebo reference="base_scan">
     <material>Gazebo/FlatBlack</material>
     <sensor type="ray" name="lds_lfcd_sensor">
@@ -120,16 +108,16 @@
       <ray>
         <scan>
           <horizontal>
-            <samples>${lds_scan_samples}</samples>
-            <resolution>${lds_scan_resolution}</resolution>
-            <min_angle>${lds_scan_angle[0]}</min_angle>
-            <max_angle>${lds_scan_angle[1]}</max_angle>
+            <samples>360</samples>
+            <resolution>1</resolution>
+            <min_angle>0.0</min_angle>
+            <max_angle>6.28319</max_angle>
           </horizontal>
         </scan>
         <range>
-          <min>${lds_range[0]}</min>
-          <max>${lds_range[1]}</max>
-          <resolution>${lds_range_resolution}</resolution>
+          <min>0.120</min>
+          <max>3.5</max>
+          <resolution>0.015</resolution>
         </range>
         <noise>
           <type>gaussian</type>
@@ -138,34 +126,25 @@
         </noise>
       </ray>
       <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
-        <topicName>${ldsTopicName}</topicName>
-        <frameName>${ldsFrameName}</frameName>
+        <topicName>scan</topicName>
+        <frameName>base_scan</frameName>
       </plugin>
     </sensor>
   </gazebo>
-
-  <xacro:property name="cam_rate" value="${props['cam_rate']}" />
-  <xacro:property name="cam_fov" value="${props['cam_fov']}" />
-  <xacro:property name="cam_image_size" value="${props['cam_image_size']}" />
-  <xacro:property name="cam_range" value="${props['cam_range']}" />
-  <xacro:property name="motors_rate" value="${props['val1']}" />
-  <xacro:property name="imageTopicName" value="${props['imageTopicName']}" />
-  <xacro:property name="imageInfoTopicName" value="${props['imageInfoTopicName']}" />
-
  <!-- camera -->
   <gazebo reference="camera_link">
     <sensor type="camera" name="camera1">
-      <update_rate>${cam_rate}</update_rate>
+      <update_rate>30.0</update_rate>
       <camera name="head">
-        <horizontal_fov>${cam_fov}</horizontal_fov>
+        <horizontal_fov>1.3962634</horizontal_fov>
         <image>
-          <width>${cam_image_size[0]}</width>
-          <height>${cam_image_size[1]}</height>
+          <width>800</width>
+          <height>800</height>
           <format>R8G8B8</format>
         </image>
         <clip>
-          <near>${cam_range[0]}</near>
-          <far>${cam_range[1]}</far>
+          <near>0.02</near>
+          <far>300</far>
         </clip>
         <noise>
           <type>gaussian</type>
@@ -180,8 +159,8 @@
         <alwaysOn>true</alwaysOn>
         <updateRate>30.0</updateRate> <!--images prises par seconde -->
         <cameraName></cameraName> <!-- nom de la camera -->
-        <imageTopicName>${imageTopicName}</imageTopicName> 
-        <cameraInfoTopicName>${imageInfoTopicName}</cameraInfoTopicName>
+        <imageTopicName>camera/image_raw</imageTopicName> 
+        <cameraInfoTopicName>camera/camera_info</cameraInfoTopicName>
         <frameName>camera_link</frameName>
         <hackBaseline>0.07</hackBaseline>
         <distortionK1>0.0</distortionK1>

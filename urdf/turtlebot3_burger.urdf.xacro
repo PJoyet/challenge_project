@@ -1,13 +1,8 @@
 <?xml version="1.0" ?>
 <robot name="turtlebot3_burger" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:include filename="$(find challenge_project)/urdf/turtlebot3_burger/common_properties.xacro"/>
-  <xacro:include filename="$(find challenge_project)/urdf/turtlebot3_burger/turtlebot3_burger.gazebo.xacro"/>
-  <xacro:property name="yaml_file" value="$(find challenge_project)/config/turtlebot3_burger.yaml" />
-  <xacro:property name="props" value="${load_yaml(yaml_file)}"/>
-  <xacro:property name="camera_link" value="0.015" /> <!-- Size of square 'camera' box -->
-  <xacro:property name="cam_ori" value="${props['cam_orientation']}" />
-  <xacro:property name="cam_pos" value="${props['cam_position']}" />
-
+  <xacro:include filename="$(find challenge_project)/urdf/common_properties.xacro"/>
+  <xacro:include filename="$(find challenge_project)/urdf/turtlebot3_burger.gazebo.xacro"/>
+    <xacro:property name="camera_link" value="0.015" /> <!-- Size of square 'camera' box -->
   <link name="base_footprint"/>
 
   <joint name="base_joint" type="fixed">
@@ -194,8 +189,7 @@
   </link>
  <joint name="camera_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="${cam_pos[0]} ${cam_pos[1]} ${cam_pos[2]}"
-	    rpy="${cam_ori[0]} ${cam_ori[1]} ${cam_ori[2]}"/> <!--position et orientation de la camera-->
+    <origin xyz="0.03 0 0.125" rpy="0 0.610865238 0"/> <!--position et orientation de la camera-->
     <parent link="base_link"/>
     <child link="camera_link"/>
   </joint>

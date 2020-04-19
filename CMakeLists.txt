@@ -11,7 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
   FILES
-  FBLR_distance.msg
+  cardinal_direction.msg
 )
 
 catkin_python_setup(

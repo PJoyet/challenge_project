@@ -1,24 +1,24 @@
+<?xml version="1.0"?>
 <launch>
 
-  <arg name="vitesse_lin" default="0.5"/>
-  <arg name="vitesse_ang" default="0.5"/>
+  <param name="linear_scale" type="double" value="0.5" />
 
   <include file="$(find challenge_project)/launch/gazebo.launch">
-    <arg name="world" value="$(find challenge_project)/worlds/challenge2.world"/>
-    <arg name="yaw" value="3.14"/>
+  <arg name="x" value="0"/>
+  <arg name="y" value="0"/>
+  <arg name="z" value="0.0175"/>
+  <arg name="roll" value="0"/>
+  <arg name="pitch" value="0"/>
+  <arg name="yaw" value="3.1415"/>
+  <arg name="world" value="$(find challenge_project)/worlds/challenge2.world"/>
   </include>
 
-  <include file="$(find challenge_project)/launch/challenge2/lds_stop.launch">
-    <arg name="nom" value='turtlebot'/>
-  </include>
+   <node pkg="challenge_project" name="lds_distance" type="lds_distance_publisher.py" required='true'/>
+   <node pkg="challenge_project" name="lds_stop" type="emergency_stop.py" required="true"/>
 
-  <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
-    <param name="publish_frequency" type="double" value="30.0" />
-  </node>
-
-  <node pkg="joint_state_publisher" type="joint_state_publisher" name="state_publisher"></node>
-
-  <param name="linear_scale" type="double" value="$(arg vitesse_lin)" />
-  <param name="angular_scale" type="double" value="$(arg vitesse_ang)" />
+  <node name="pos_vel_plot"
+        pkg="rqt_plot"
+        type="rqt_plot"
+        args="/lds_distance/N" />
 
 </launch>
