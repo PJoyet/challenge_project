@@ -1,21 +1,31 @@
 <?xml version="1.0"?>
-<launch>
+<!-- author: Pierre Joyet (3407684) - Marine CORNET (3531423) - ROS Project - M1 SAR 2020 -->
 
+<launch>
+  <!-- gazebo gui launch -->
+  <arg name="gui" default="true"/>
+
+  <!-- speed value -->
   <param name="linear_scale" type="double" value="0.5" />
 
+  <!-- robot initial position and rotation -->
   <include file="$(find challenge_project)/launch/gazebo.launch">
-  <arg name="x" value="0"/>
-  <arg name="y" value="0"/>
-  <arg name="z" value="0.0175"/>
-  <arg name="roll" value="0"/>
-  <arg name="pitch" value="0"/>
-  <arg name="yaw" value="3.1415"/>
-  <arg name="world" value="$(find challenge_project)/worlds/challenge2.world"/>
+    <arg name="x" value="0"/>
+    <arg name="y" value="0"/>
+    <arg name="z" value="0.0175"/>
+    <arg name="roll" value="0"/>
+    <arg name="pitch" value="0"/>
+    <arg name="yaw" value="3.1415"/>
+    <arg name="world" value="$(find challenge_project)/worlds/challenge2.world"/>
+    <arg name="gui" value="$(arg gui)"/>
   </include>
 
-   <node pkg="challenge_project" name="lds_distance" type="lds_distance_publisher.py" required='true'/>
-   <node pkg="challenge_project" name="lds_stop" type="emergency_stop.py" required="true"/>
+  <!-- start distance publisher node -->
+  <node pkg="challenge_project" name="lds_distance" type="lds_distance_publisher.py" required='true'/>
+  <!-- start line emergency stop node -->
+  <node pkg="challenge_project" name="lds_stop" type="emergency_stop.py" required="true"/>
 
+  <!-- launch front distance plot -->
   <node name="pos_vel_plot"
         pkg="rqt_plot"
         type="rqt_plot"

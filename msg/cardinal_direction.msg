@@ -1,3 +1,5 @@
+#author: Pierre Joyet (3407684) - Marine CORNET (3531423) - Projet ROS- M1 SAR 2020
+
 float32 N
 float32 NW
 float32 W

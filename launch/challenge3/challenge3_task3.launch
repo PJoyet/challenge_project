@@ -1,13 +1,27 @@
-<launch>
+<?xml version="1.0"?>
+<!-- author: Pierre Joyet (3407684) - Marine CORNET (3531423) - ROS Project - M1 SAR 2020 -->
 
+<launch>
+  <!-- gazebo gui launch -->
+  <arg name="gui" default="true"/>
+
+  <!-- challenge 3 task 1 and 2 running -->
+  <arg name="task1" default="true"/>
   <arg name="task2" default="true"/>
 
+  <!-- if task 2 running True -->
   <group if="$(arg task2)">
-    <include file="$(find challenge_project)/launch/challenge3/challenge3_task2.launch"/>
+    <!-- launch task 2 -->
+    <include file="$(find challenge_project)/launch/challenge3/challenge3_task2.launch">
+      <arg name="task1" value="$(arg task1)"/>
+    </include>
   </group>
 
+  <!-- if task 2 running False -->
   <group unless="$(arg task2)">
-    <param name="task1_running" type="bool" value="false"/>
+    <!-- set running task 2 part 2 indicator to False -->
+    <param name="task2_part2_running" type="bool" value="false"/>
+    <!-- robot initial position and rotation -->
     <include file="$(find challenge_project)/launch/gazebo.launch">
       <arg name="x" value="-18"/>
       <arg name="y" value="3.2"/>
@@ -16,15 +30,23 @@
       <arg name="pitch" value="0"/>
       <arg name="yaw" value="3.14"/>
       <arg name="world" value="$(find challenge_project)/worlds/challenge3.world"/>
+      <arg name="gui" value="$(arg gui)"/>
     </include>
-    <param name="task2_part2_running" type="bool" value="false"/>
-  <node name="OBSTACLE" pkg="challenge_project" type="challenge3b_world_control.py"/>
+    <!-- Moving obstacle -->
+    <node name="OBSTACLE" pkg="challenge_project" type="challenge3b_world_control.py"/>
+
+    <!-- camera image viewer -->
+    <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+      <remap from="image" to="/camera/image_raw" />
+    </node>
+
   </group>
 
+  <!-- speed value -->
   <param name="linear_scale" type="double" value="0.5" />
-   <node pkg="challenge_project" name="navigation" type="navigation.py" launch-prefix="xterm -e"/>
+  <!-- start navigation node -->
+   <node pkg="challenge_project" name="navigation" type="navigation.py"/>
 
-  <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
-    <remap from="image" to="/camera/image_raw" />
-  </node>
+
+
 </launch>

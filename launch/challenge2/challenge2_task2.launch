@@ -1,23 +1,35 @@
 <?xml version="1.0"?>
+<!-- author: Pierre Joyet (3407684) - Marine CORNET (3531423) - ROS Project - M1 SAR 2020 -->
+
 <launch>
+  <!-- gazebo gui launch -->
+  <arg name="gui" default="true"/>
 
+  <!-- speed value -->
   <param name="linear_scale" type="double" value="0.2" />
-  <param name="distance_constante" type="double" value="0.3" />
+  <!-- constant distance value -->
+  <param name="constant_distance" type="double" value="0.3" />
 
+  <!-- robot initial position and rotation -->
   <include file="$(find challenge_project)/launch/gazebo.launch">
-  <arg name="x" value="0"/>
-  <arg name="y" value="0"/>
-  <arg name="z" value="0.0175"/>
-  <arg name="roll" value="0"/>
-  <arg name="pitch" value="0"/>
-  <arg name="yaw" value="3.1415"/>
-  <arg name="world" value="$(find challenge_project)/worlds/challenge2.world"/>
+    <arg name="x" value="0"/>
+    <arg name="y" value="0"/>
+    <arg name="z" value="0.0175"/>
+    <arg name="roll" value="0"/>
+    <arg name="pitch" value="0"/>
+    <arg name="yaw" value="3.1415"/>
+    <arg name="world" value="$(find challenge_project)/worlds/challenge2.world"/>
+    <arg name="gui" value="$(arg gui)"/>
   </include>
 
-   <node name="obstacle_control" pkg="challenge_project" type="challenge2_task2_world_control.py"/>
-   <node pkg="challenge_project" name="lds_distance" type="lds_distance_publisher.py" required='true'/>
-   <node pkg="challenge_project" name="lds_stop" type="distance_servoing.py" required="true"/>
+  <!-- challenge 2 task 2 controller -->
+  <node name="obstacle_control" pkg="challenge_project" type="challenge2_task2_world_control.py"/>
+  <!-- start distance publisher node -->
+  <node pkg="challenge_project" name="lds_distance" type="lds_distance_publisher.py" required='true'/>
+  <!-- start distance servoing node -->
+  <node pkg="challenge_project" name="lds_stop" type="distance_servoing.py" required="true"/>
 
+  <!-- launch front distance plot -->
   <node name="pos_vel_plot"
         pkg="rqt_plot"
         type="rqt_plot"
